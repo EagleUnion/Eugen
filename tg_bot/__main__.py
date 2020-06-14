@@ -47,6 +47,8 @@ the things I can help you with.
 And the following:
 """.format(dispatcher.bot.first_name, "" if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
+EUGEN_IMG = "https://telegra.ph/file/cbc8778ccb632e2cc7198.jpg"
+
 DONATE_STRING = """Heya, glad to hear you want to donate!
 It took lots of work for my creator to get me to where I am now, and every donation helps \
 motivate him to make me even better. All the donation money will go to a better VPS to host me, and/or beer \
@@ -144,9 +146,11 @@ def start(bot: Bot, update: Update, args: List[str]):
 
         else:
             first_name = update.effective_user.first_name
-            update.effective_message.reply_text(
+            update.effective_message.reply_photo(EUGEN_IMG,
                 PM_START_TEXT.format(escape_markdown(first_name), escape_markdown(bot.first_name), OWNER_ID),
-                parse_mode=ParseMode.MARKDOWN)
+                parse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Add Eugen to your group",
+                                                                       url="t.me/{}?startgroup=true".format(bot.username))]]))
+
     else:
         update.effective_message.reply_text("Yo, whadup?")
 
