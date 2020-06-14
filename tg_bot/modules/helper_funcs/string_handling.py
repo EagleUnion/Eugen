@@ -138,7 +138,7 @@ def button_markdown_parser(txt: str, entities: Dict[MessageEntity, str] = None, 
         else:
             note_data += markdown_note[prev:to_check]
             prev = match.start(1) - 1
-    else:
+        
         note_data += markdown_note[prev:]
 
     return note_data, buttons
@@ -205,7 +205,7 @@ def split_quotes(text: str) -> List:
         if not key:
             key = text[0] + text[0]
         return list(filter(None, [key, rest]))
-    else:
+        
         return text.split(None, 1)
 
 

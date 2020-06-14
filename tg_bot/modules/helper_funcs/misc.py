@@ -31,14 +31,13 @@ def split_message(msg: str) -> List[str]:
             else:
                 result.append(small_msg)
                 small_msg = line
-        else:
             # Else statement at the end of the for loop, so append the leftover string.
             result.append(small_msg)
 
         return result
 
 
-def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
+def paginate_modules(_page_n: int, module_dict: Dict, prefix, chat=None) -> List:
     if not chat:
         modules = sorted(
             [EqInlineKeyboardButton(x.__mod_name__,
@@ -97,7 +96,6 @@ def build_keyboard(buttons):
     for btn in buttons:
         if btn.same_line and keyb:
             keyb[-1].append(InlineKeyboardButton(btn.name, url=btn.url))
-        else:
             keyb.append([InlineKeyboardButton(btn.name, url=btn.url)])
 
     return keyb

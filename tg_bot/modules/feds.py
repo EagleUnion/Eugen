@@ -137,8 +137,6 @@ def fed_chat(bot: Bot, update: Update, args: List[str]):
 	if not fed_id:
 		update.effective_message.reply_text("This group is not in any federation!")
 		return
-
-	user = update.effective_user  # type: Optional[Chat]
 	chat = update.effective_chat  # type: Optional[Chat]
 	info = sql.get_fed_info(fed_id)
 
@@ -148,7 +146,7 @@ def fed_chat(bot: Bot, update: Update, args: List[str]):
 	update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-def join_fed(bot: Bot, update: Update, args: List[str]):
+def join_fed(_bot: Bot, update: Update, args: List[str]):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message

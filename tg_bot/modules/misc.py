@@ -359,7 +359,7 @@ def shell(command):
     stdout,stderr = process.communicate()
     return (stdout,stderr)
 
-def ram(bot: Bot, update: Update):
+def ram(_bot: Bot, update: Update):
     cmd = "ps -o pid"
     output = shell(cmd)[0].decode()
     processes = output.splitlines()
@@ -401,7 +401,7 @@ def markdown_help(bot: Bot, update: Update):
 
 @run_async
 def stats(bot: Bot, update: Update):
-    update.effective_message.reply_text("Current stats:\n" + "\n".join([mod.__stats__() for mod in STATS]))
+    update.effective_message.reply_text("Current stats:\n" + "\n".join(mod.__stats__() for mod in STATS))
 
 
 @run_async 

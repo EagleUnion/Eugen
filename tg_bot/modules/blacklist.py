@@ -50,7 +50,7 @@ def add_blacklist(bot: Bot, update: Update):
     words = msg.text.split(None, 1)
     if len(words) > 1:
         text = words[1]
-        to_blacklist = list(set(trigger.strip() for trigger in text.split("\n") if trigger.strip()))
+        to_blacklist = list({trigger.strip() for trigger in text.split("\n") if trigger.strip()})
         for trigger in to_blacklist:
             sql.add_to_blacklist(chat.id, trigger.lower())
 
@@ -74,7 +74,7 @@ def unblacklist(bot: Bot, update: Update):
     words = msg.text.split(None, 1)
     if len(words) > 1:
         text = words[1]
-        to_unblacklist = list(set(trigger.strip() for trigger in text.split("\n") if trigger.strip()))
+        to_unblacklist = list({trigger.strip() for trigger in text.split("\n") if trigger.strip()})
         successful = 0
         for trigger in to_unblacklist:
             success = sql.rm_from_blacklist(chat.id, trigger.lower())
@@ -134,7 +134,7 @@ def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-def __chat_settings__(chat_id, user_id):
+def __chat_settings__(chat_id, _user_id):
     blacklisted = sql.num_blacklist_chat_filters(chat_id)
     return "There are {} blacklisted words.".format(blacklisted)
 
