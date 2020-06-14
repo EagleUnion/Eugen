@@ -78,20 +78,27 @@ def send(update, message, keyboard, backup_message):
 
 @run_async
 def new_member(bot: Bot, update: Update):
-    chat = update.effective_chat  # type: Optional[Chat]
+    chat = update.effective_chat
+    user = update.effective_user
+    msg = update.effective_message
 
     should_welc, cust_welcome, welc_type = sql.get_welc_pref(chat.id)
-    if should_welc:
-        sent = None
-        new_members = update.effective_message.new_chat_members
-        for new_mem in new_members:
+    
+    new_members = update.effective_message.new_chat_members
 
-            if sw != None:
+    for new_mem in new_members:
+
+        welcome_log = None
+        sent = None
+        should_mute = True
+        welcome_bool = True
+        
+        if sw != None:
                 sw_ban = sw.get_ban(new_mem.id)
                 if sw_ban:
                     return
 
-            # Give the owner a special welcome
+        if should_welc:
             if new_mem.id == OWNER_ID:
                 update.effective_message.reply_text("Master is in the houseeee, let's get this party started!")
                 continue
@@ -140,7 +147,7 @@ def new_member(bot: Bot, update: Update):
         if prev_welc:
             try:
                 bot.delete_message(chat.id, prev_welc)
-            except BadRequest:
+            except BadRequest as excp:
                 pass
 
             if sent:
@@ -456,7 +463,7 @@ def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-def __chat_settings__(chat_id, _user_id):
+def __chat_settings__(chat_id, user_id):
     welcome_pref, _, _ = sql.get_welc_pref(chat_id)
     goodbye_pref, _, _ = sql.get_gdbye_pref(chat_id)
     return "This chat has it's welcome preference set to `{}`.\n" \
@@ -465,7 +472,6 @@ def __chat_settings__(chat_id, _user_id):
 
 __help__ = """
 {}
-
 *Admin only:*
  - /welcome <on/off>: enable/disable welcome messages.
  - /welcome: shows current welcome settings.
@@ -476,7 +482,6 @@ __help__ = """
  - /resetwelcome: reset to the default welcome message.
  - /resetgoodbye: reset to the default goodbye message.
  - /cleanwelcome <on/off>: On new member, try to delete the previous welcome message to avoid spamming the chat.
-
  - /welcomehelp: view more formatting information for custom welcome/goodbye messages.
 """.format(WELC_HELP_TXT)
 
