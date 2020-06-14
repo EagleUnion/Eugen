@@ -96,7 +96,6 @@ def build_keyboard(buttons):
     for btn in buttons:
         if btn.same_line and keyb:
             keyb[-1].append(InlineKeyboardButton(btn.name, url=btn.url))
-        else:
             keyb.append([InlineKeyboardButton(btn.name, url=btn.url)])
 
     return keyb
