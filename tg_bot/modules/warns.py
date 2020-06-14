@@ -181,7 +181,7 @@ def warns(bot: Bot, update: Update, args: List[str]):
 
     if result and result[0] != 0:
         num_warns, reasons = result
-        limit, soft_warn = sql.get_warn_setting(chat.id)
+        limit, _ = sql.get_warn_setting(chat.id)
 
         if reasons:
             text = "This user has {}/{} warnings, for the following reasons:".format(num_warns, limit)
@@ -327,7 +327,7 @@ def set_warn_limit(bot: Bot, update: Update, args: List[str]) -> str:
         else:
             msg.reply_text("Give me a number as an arg!")
     else:
-        limit, soft_warn = sql.get_warn_setting(chat.id)
+        limit, _ = sql.get_warn_setting(chat.id)
 
         msg.reply_text("The current warn limit is {}".format(limit))
     return ""
@@ -361,7 +361,7 @@ def set_warn_strength(bot: Bot, update: Update, args: List[str]):
         else:
             msg.reply_text("I only understand on/yes/no/off!")
     else:
-        limit, soft_warn = sql.get_warn_setting(chat.id)
+        _, soft_warn = sql.get_warn_setting(chat.id)
         if soft_warn:
             msg.reply_text("Warns are currently set to *kick* users when they exceed the limits.",
                            parse_mode=ParseMode.MARKDOWN)
@@ -379,7 +379,7 @@ def __stats__():
 
 def __import_data__(chat_id, data):
     for user_id, count in data.get('warns', {}).items():
-        for x in range(int(count)):
+        for _ in range(int(count)):
             sql.warn_user(user_id, chat_id)
 
 

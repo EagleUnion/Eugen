@@ -1,11 +1,10 @@
 from typing import Optional, List
 
-from telegram import Message, Update, Bot, User
-from telegram import MessageEntity
-from telegram.ext import Filters, MessageHandler, run_async
+from telegram import Update, Bot
+from telegram.ext import run_async
 from telegram import ParseMode
 
-from tg_bot import dispatcher, LOGGER
+from tg_bot import dispatcher
 from tg_bot.modules.disable import DisableAbleCommandHandler
 from emoji import UNICODE_EMOJI
 
@@ -15,7 +14,6 @@ from googletrans import Translator
 @run_async
 def totranslate(bot: Bot, update: Update):
 	msg = update.effective_message
-	chat_id = update.effective_chat.id
 	"""
 	lang = str("af,am,ar,az,be,bg,bn,bs,ca,ceb,co,cs,cy,da,de,el,en,eo,es,et,eu,fa,fi,fr,fy,ga,gd,gl,gu,ha,haw,hi,hmn,hr,ht,hu,hy,id,ig,is,it,iw,ja,jw,ka,kk,km,kn,ko,ku,ky,la,lb,lo,lt,lv,mg,mi,mk,ml,mn,mr,ms,mt,my,ne,nl,no,ny,pa,pl,ps,pt,ro,ru,sd,si,sk,sl,sm,sn,so,sq,sr,st,su,sv,sw,ta,te,tg,th,tl,tr,uk,ur,uz,vi,xh,yi,yo,zh,zh_CN,zh_TW,zu".split(","))
 	try:

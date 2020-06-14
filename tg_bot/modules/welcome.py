@@ -140,7 +140,7 @@ def new_member(bot: Bot, update: Update):
         if prev_welc:
             try:
                 bot.delete_message(chat.id, prev_welc)
-            except BadRequest as excp:
+            except BadRequest:
                 pass
 
             if sent:

@@ -99,7 +99,7 @@ def report(bot: Bot, update: Update) -> str:
 
                 except Unauthorized:
                     pass
-                except BadRequest as excp:  # TODO: cleanup exceptions
+                except BadRequest:  # TODO: cleanup exceptions
                     LOGGER.exception("Exception while reporting user")
         return msg
 

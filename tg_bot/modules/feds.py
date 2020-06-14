@@ -127,7 +127,6 @@ def del_fed(bot: Bot, update: Update, args: List[str]):
 @run_async
 def fed_chat(bot: Bot, update: Update, args: List[str]):
 	chat = update.effective_chat  # type: Optional[Chat]
-	user = update.effective_user  # type: Optional[User]
 	fed_id = sql.get_fed_id(chat.id)
 
 	user_id = update.effective_message.from_user.id
@@ -390,7 +389,7 @@ def fed_ban(bot: Bot, update: Update, args: List[str]):
 
 	user_id, reason = extract_user_and_text(message, args)
 
-	fban, fbanreason = sql.get_fban_user(fed_id, user_id)
+	fban, _ = sql.get_fban_user(fed_id, user_id)
 
 	if not user_id:
 		message.reply_text("You don't seem to be referring to a user.")
@@ -529,7 +528,7 @@ def unfban(bot: Bot, update: Update, args: List[str]):
 		update.effective_message.reply_text("This group is not a part of any federation!")
 		return
 
-	info = sql.get_fed_info(fed_id)
+	sql.get_fed_info(fed_id)
 
 	if is_user_fed_admin(fed_id, user.id) is False:
 		update.effective_message.reply_text("Only federation admins can do this!")
@@ -545,12 +544,10 @@ def unfban(bot: Bot, update: Update, args: List[str]):
 		message.reply_text("That's not a user!")
 		return
 
-	fban, fbanreason = sql.get_fban_user(fed_id, user_id)
+	fban, _ = sql.get_fban_user(fed_id, user_id)
 	if fban is False:
 		message.reply_text("This user is not fbanned!")
 		return
-
-	banner = update.effective_user  # type: Optional[User]
 
 	message.reply_text("I'll give {} a second chance in this federation".format(mention_html(user_chat.id, user_chat.first_name)),
 	parse_mode=ParseMode.HTML)
@@ -589,7 +586,7 @@ def unfban(bot: Bot, update: Update, args: List[str]):
 
 	message.reply_text("{} has been un-fbanned.".format(mention_html(user_chat.id, user_chat.first_name)),
         parse_mode=ParseMode.HTML)
-	FEDADMIN = sql.all_fed_users(fed_id)
+	sql.all_fed_users(fed_id)
 """
 	for x in FEDADMIN:
 		getreport = sql.user_feds_report(x)
@@ -865,7 +862,7 @@ def fed_import_bans(bot: Bot, update: Update, chat_data):
 	msg = update.effective_message  # type: Optional[Message]
 
 	fed_id = sql.get_fed_id(chat.id)
-	info = sql.get_fed_info(fed_id)
+	sql.get_fed_info(fed_id)
 
 	if not fed_id:
 		update.effective_message.reply_text("This group is not a part of any federation!")
@@ -912,7 +909,7 @@ def fed_import_bans(bot: Bot, update: Update, chat_data):
 						continue
 					try:
 						data = json.loads(x)
-					except json.decoder.JSONDecodeError as err:
+					except json.decoder.JSONDecodeError:
 						failed += 1
 						continue
 					try:
@@ -1006,7 +1003,6 @@ def fed_import_bans(bot: Bot, update: Update, chat_data):
 @run_async
 def del_fed_button(bot, update):
 	query = update.callback_query
-	userid = query.message.chat.id
 	fed_id = query.data.split("_")[1]
 
 	if fed_id == 'cancel':
@@ -1052,7 +1048,7 @@ def welcome_fed(bot, update):
 	user = update.effective_user  # type: Optional[User]
 
 	fed_id = sql.get_fed_id(chat.id)
-	fban, fbanreason = sql.get_fban_user(fed_id, user.id)
+	fban, _ = sql.get_fban_user(fed_id, user.id)
 	if fban:
 		update.effective_message.reply_text("This user is banned in the current federation and has been removed!")
 		bot.kick_chat_member(chat.id, user.id)
