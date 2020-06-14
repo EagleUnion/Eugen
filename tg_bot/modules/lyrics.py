@@ -2,7 +2,7 @@
 
 from tswift import Song
 
-from telegram import Bot, Update, Message, Chat
+from telegram import Bot, Update
 from telegram.ext import run_async
 
 from tg_bot import dispatcher
