@@ -504,11 +504,11 @@ __help__ = """
 - /info: get information about a user.
 - /gdpr: deletes your information from the bot's database. Private chats only.
 - /lyrics <song>: returns the lyrics of that song.
-- /ud <expression> :- Returns the top definition of the word or expression on Urban Dictionary.
+- /ud <expression> : Returns the top definition of the word or expression on Urban Dictionary.
 - /markdownhelp: quick summary of how markdown works in telegram - can only be called in private chats.
 ──────────────────────────────────────
 *#MyAnimeList*
-Get information about anime, manga or characters with the help of this module! All data is fetched from [MyAnimeList](https://myanimelist.net).
+Get information about anime, manga or characters with the help of this module!
 *Available commands:*
 - /sanime <anime>: returns information about the anime.
 - /scharacter <character>: returns information about the character.
