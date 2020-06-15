@@ -300,7 +300,7 @@ you and your groups by removing spam flooders as quickly as possible. They can b
 
 Eugen also integrates @Spamwatch API into gbans to remove Spammers as much as possible from your chatroom!
 *What is SpamWatch?*
-SpamWatch maintains a large constantly updated ban-list of spambots, trolls, bitcoin spammers and unsavoury characters[.](https://telegra.ph/file/ac12a2c6b831dd005015b.jpg)
+SpamWatch maintains a large constantly updated ban-list of spambots, bitcoin spammers and unsavoury characters[.](https://telegra.ph/file/ac12a2c6b831dd005015b.jpg)
 Eugen will constantly help banning spammers off from your group automatically So, you don't have to worry about spammers storming your group.
 """
 
