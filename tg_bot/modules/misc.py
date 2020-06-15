@@ -508,22 +508,22 @@ __help__ = """
  - /markdownhelp: quick summary of how markdown works in telegram - can only be called in private chats.
  
  *#MyAnimeList*
- Get information about anime, manga or characters with the help of this module! All data is fetched from [MyAnimeList](https://myanimelist.net).
-*Available commands:*
- - /sanime <anime>: returns information about the anime.
- - /scharacter <character>: returns information about the character.
- - /smanga <manga>: returns information about the manga.
- - /upcoming: returns a list of new anime in the upcoming seasons.
+    Get information about anime, manga or characters with the help of this module! All data is fetched from [MyAnimeList](https://myanimelist.net).
+      *Available commands:*
+        - /sanime <anime>: returns information about the anime.
+        - /scharacter <character>: returns information about the character.
+        - /smanga <manga>: returns information about the manga.
+        - /upcoming: returns a list of new anime in the upcoming seasons.
  *#Last.FM*
- Share what you're what listening to with the help of this module!
-*Available commands:*
- - /setuser <username>: sets your last.fm username.
- - /clearuser: removes your last.fm username from the bot's database.
- - /lastfm: returns what you're scrobbling on last.fm.
- *Stickers*
- - /stickerid: reply to a sticker to get its ID.
- - /getsticker: reply to a sticker to get the raw PNG image.
- - /steal: reply to a sticker or image to add it to your pack.
+      Share what you're what listening to with the help of this module!
+        *Available commands:*
+         - /setuser <username>: sets your last.fm username.
+         - /clearuser: removes your last.fm username from the bot's database.
+         - /lastfm: returns what you're scrobbling on last.fm.
+        *Stickers*
+          - /stickerid: reply to a sticker to get its ID.
+          - /getsticker: reply to a sticker to get the raw PNG image.
+          - /steal: reply to a sticker or image to add it to your pack.
 
 """
 
