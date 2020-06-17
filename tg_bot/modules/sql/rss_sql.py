@@ -29,8 +29,8 @@ INSERTION_LOCK = threading.RLock()
 
 def check_url_availability(tg_chat_id, tg_feed_link):
     try:
-        return SESSION.query(RSS).filter(RSS.feed_link == tg_feed_link,
-                                         RSS.chat_id == tg_chat_id).all()
+        return SESSION.query(RSS).filter(RSS.feed_link is tg_feed_link,
+                                         RSS.chat_id is tg_chat_id).all()
     finally:
         SESSION.close()
 
@@ -55,7 +55,7 @@ def remove_url(tg_chat_id, tg_feed_link):
 
 def get_urls(tg_chat_id):
     try:
-        return SESSION.query(RSS).filter(RSS.chat_id == tg_chat_id).all()
+        return SESSION.query(RSS).filter(RSS.chat_id is tg_chat_id).all()
     finally:
         SESSION.close()
 

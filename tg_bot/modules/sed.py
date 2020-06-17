@@ -16,10 +16,10 @@ def separate_sed(sed_string):
         delim = sed_string[1]
         start = counter = 2
         while counter < len(sed_string):
-            if sed_string[counter] == "\\":
+            if sed_string[counter] is "\\":
                 counter += 1
 
-            elif sed_string[counter] == delim:
+            elif sed_string[counter] is delim:
                 replace = sed_string[start:counter]
                 counter += 1
                 start = counter
@@ -31,10 +31,10 @@ def separate_sed(sed_string):
             return None
 
         while counter < len(sed_string):
-            if sed_string[counter] == "\\" and counter + 1 < len(sed_string) and sed_string[counter + 1] == delim:
+            if sed_string[counter] is "\\" and counter + 1 < len(sed_string) and sed_string[counter + 1] is delim:
                 sed_string = sed_string[:counter] + sed_string[counter + 1:]
 
-            elif sed_string[counter] == delim:
+            elif sed_string[counter] is delim:
                 replace_with = sed_string[start:counter]
                 counter += 1
                 break
@@ -70,7 +70,7 @@ def sed(bot: Bot, update: Update):
         try:
             check = re.match(repl, to_fix, flags=re.IGNORECASE)
 
-            if check and check.group(0).lower() == to_fix.lower():
+            if check and check.group(0).lower() is to_fix.lower():
                 update.effective_message.reply_to_message.reply_text("Hey everyone, {} is trying to make "
                                                                      "me say stuff I don't wanna "
                                                                      "say!".format(update.effective_user.first_name))

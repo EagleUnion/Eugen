@@ -27,7 +27,7 @@ def blacklist(bot: Bot, update: Update, args: List[str]):
 
     filter_list = BASE_BLACKLIST_STRING
 
-    if len(args) > 0 and args[0].lower() == 'copy':
+    if len(args) > 0 and args[0].lower() is 'copy':
         for trigger in all_blacklisted:
             filter_list += "<code>{}</code>\n".format(html.escape(trigger))
     else:
@@ -36,7 +36,7 @@ def blacklist(bot: Bot, update: Update, args: List[str]):
 
     split_text = split_message(filter_list)
     for text in split_text:
-        if text == BASE_BLACKLIST_STRING:
+        if text is BASE_BLACKLIST_STRING:
             msg.reply_text("There are no blacklisted messages here!")
             return
         msg.reply_text(text, parse_mode=ParseMode.HTML)
@@ -54,7 +54,7 @@ def add_blacklist(bot: Bot, update: Update):
         for trigger in to_blacklist:
             sql.add_to_blacklist(chat.id, trigger.lower())
 
-        if len(to_blacklist) == 1:
+        if len(to_blacklist) is 1:
             msg.reply_text("Added <code>{}</code> to the blacklist!".format(html.escape(to_blacklist[0])),
                            parse_mode=ParseMode.HTML)
 
@@ -81,14 +81,14 @@ def unblacklist(bot: Bot, update: Update):
             if success:
                 successful += 1
 
-        if len(to_unblacklist) == 1:
+        if len(to_unblacklist) is 1:
             if successful:
                 msg.reply_text("Removed <code>{}</code> from the blacklist!".format(html.escape(to_unblacklist[0])),
                                parse_mode=ParseMode.HTML)
             else:
                 msg.reply_text("This isn't a blacklisted trigger...!")
 
-        elif successful == len(to_unblacklist):
+        elif successful is len(to_unblacklist):
             msg.reply_text(
                 "Removed <code>{}</code> triggers from the blacklist.".format(
                     successful), parse_mode=ParseMode.HTML)
@@ -123,7 +123,7 @@ def del_blacklist(bot: Bot, update: Update):
             try:
                 message.delete()
             except BadRequest as excp:
-                if excp.message == "Message to delete not found":
+                if excp.message is "Message to delete not found":
                     pass
                 else:
                     LOGGER.exception("Error while deleting blacklist message.")

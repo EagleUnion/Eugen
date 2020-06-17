@@ -102,33 +102,33 @@ def update_lock(chat_id, lock_type, locked):
         if not curr_perm:
             curr_perm = init_permissions(chat_id)
 
-        if lock_type == "audio":
+        if lock_type is "audio":
             curr_perm.audio = locked
-        elif lock_type == "voice":
+        elif lock_type is "voice":
             curr_perm.voice = locked
-        elif lock_type == "contact":
+        elif lock_type is "contact":
             curr_perm.contact = locked
-        elif lock_type == "video":
+        elif lock_type is "video":
             curr_perm.video = locked
-        elif lock_type == "videonote":
+        elif lock_type is "videonote":
             curr_perm.videonote = locked
-        elif lock_type == "document":
+        elif lock_type is "document":
             curr_perm.document = locked
-        elif lock_type == "photo":
+        elif lock_type is "photo":
             curr_perm.photo = locked
-        elif lock_type == "sticker":
+        elif lock_type is "sticker":
             curr_perm.sticker = locked
-        elif lock_type == "gif":
+        elif lock_type is "gif":
             curr_perm.gif = locked
-        elif lock_type == 'url':
+        elif lock_type is 'url':
             curr_perm.url = locked
-        elif lock_type == 'bots':
+        elif lock_type is 'bots':
             curr_perm.bots = locked
-        elif lock_type == 'forward':
+        elif lock_type is 'forward':
             curr_perm.forward = locked
-        elif lock_type == 'game':
+        elif lock_type is 'game':
             curr_perm.game = locked
-        elif lock_type == 'location':
+        elif lock_type is 'location':
             curr_perm.location = locked
 
         SESSION.add(curr_perm)
@@ -141,15 +141,15 @@ def update_restriction(chat_id, restr_type, locked):
         if not curr_restr:
             curr_restr = init_restrictions(chat_id)
 
-        if restr_type == "messages":
+        if restr_type is "messages":
             curr_restr.messages = locked
-        elif restr_type == "media":
+        elif restr_type is "media":
             curr_restr.media = locked
-        elif restr_type == "other":
+        elif restr_type is "other":
             curr_restr.other = locked
-        elif restr_type == "previews":
+        elif restr_type is "previews":
             curr_restr.preview = locked
-        elif restr_type == "all":
+        elif restr_type is "all":
             curr_restr.messages = locked
             curr_restr.media = locked
             curr_restr.other = locked
@@ -165,33 +165,33 @@ def is_locked(chat_id, lock_type):
     if not curr_perm:
         return False
 
-    elif lock_type == "sticker":
+    elif lock_type is "sticker":
         return curr_perm.sticker
-    elif lock_type == "photo":
+    elif lock_type is "photo":
         return curr_perm.photo
-    elif lock_type == "audio":
+    elif lock_type is "audio":
         return curr_perm.audio
-    elif lock_type == "voice":
+    elif lock_type is "voice":
         return curr_perm.voice
-    elif lock_type == "contact":
+    elif lock_type is "contact":
         return curr_perm.contact
-    elif lock_type == "video":
+    elif lock_type is "video":
         return curr_perm.video
-    elif lock_type == "videonote":
+    elif lock_type is "videonote":
         return curr_perm.videonote
-    elif lock_type == "document":
+    elif lock_type is "document":
         return curr_perm.document
-    elif lock_type == "gif":
+    elif lock_type is "gif":
         return curr_perm.gif
-    elif lock_type == "url":
+    elif lock_type is "url":
         return curr_perm.url
-    elif lock_type == "bots":
+    elif lock_type is "bots":
         return curr_perm.bots
-    elif lock_type == "forward":
+    elif lock_type is "forward":
         return curr_perm.forward
-    elif lock_type == "game":
+    elif lock_type is "game":
         return curr_perm.game
-    elif lock_type == "location":
+    elif lock_type is "location":
         return curr_perm.location
 
 
@@ -202,15 +202,15 @@ def is_restr_locked(chat_id, lock_type):
     if not curr_restr:
         return False
 
-    if lock_type == "messages":
+    if lock_type is "messages":
         return curr_restr.messages
-    elif lock_type == "media":
+    elif lock_type is "media":
         return curr_restr.media
-    elif lock_type == "other":
+    elif lock_type is "other":
         return curr_restr.other
-    elif lock_type == "previews":
+    elif lock_type is "previews":
         return curr_restr.preview
-    elif lock_type == "all":
+    elif lock_type is "all":
         return curr_restr.messages and curr_restr.media and curr_restr.other and curr_restr.preview
 
 

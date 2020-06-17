@@ -32,11 +32,11 @@ def promote(bot: Bot, update: Update, args: List[str]) -> str:
         return ""
 
     user_member = chat.get_member(user_id)
-    if user_member.status == 'administrator' or user_member.status == 'creator':
+    if user_member.status is 'administrator' or user_member.status is 'creator':
         message.reply_text("How am I meant to promote someone that's already an admin?")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("I can't promote myself! Get an admin to do it for me.")
         return ""
 
@@ -78,15 +78,15 @@ def demote(bot: Bot, update: Update, args: List[str]) -> str:
         return ""
 
     user_member = chat.get_member(user_id)
-    if user_member.status == 'creator':
+    if user_member.status is 'creator':
         message.reply_text("This person CREATED the chat, how would I demote them?")
         return ""
 
-    if not user_member.status == 'administrator':
+    if not user_member.status is 'administrator':
         message.reply_text("Can't demote what wasn't promoted!")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("I can't demote myself! Get an admin to do it for me.")
         return ""
 
@@ -123,19 +123,19 @@ def pin(bot: Bot, update: Update, args: List[str]) -> str:
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
 
-    is_group = chat.type != "private" and chat.type != "channel"
+    is_group = chat.type is not "private" and chat.type is not "channel"
 
     prev_message = update.effective_message.reply_to_message
 
     is_silent = True
     if len(args) >= 1:
-        is_silent = not (args[0].lower() == 'notify' or args[0].lower() == 'loud' or args[0].lower() == 'violent')
+        is_silent = not (args[0].lower() is 'notify' or args[0].lower() is 'loud' or args[0].lower() is 'violent')
 
     if prev_message and is_group:
         try:
             bot.pinChatMessage(chat.id, prev_message.message_id, disable_notification=is_silent)
         except BadRequest as excp:
-            if excp.message == "Chat_not_modified":
+            if excp.message is "Chat_not_modified":
                 pass
             else:
                 raise
@@ -158,7 +158,7 @@ def unpin(bot: Bot, update: Update) -> str:
     try:
         bot.unpinChatMessage(chat.id)
     except BadRequest as excp:
-        if excp.message == "Chat_not_modified":
+        if excp.message is "Chat_not_modified":
             pass
         else:
             raise
@@ -176,7 +176,7 @@ def invite(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
     if chat.username:
         update.effective_message.reply_text(chat.username)
-    elif chat.type == chat.SUPERGROUP or chat.type == chat.CHANNEL:
+    elif chat.type is chat.SUPERGROUP or chat.type is chat.CHANNEL:
         bot_member = chat.get_member(bot.id)
         if bot_member.can_invite_users:
             invitelink = bot.exportChatInviteLink(chat.id)

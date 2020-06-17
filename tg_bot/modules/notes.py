@@ -48,7 +48,7 @@ def get(bot, update, notename, show_none=True, no_format=False):
                 try:
                     bot.forward_message(chat_id=chat_id, from_chat_id=MESSAGE_DUMP, message_id=note.value)
                 except BadRequest as excp:
-                    if excp.message == "Message to forward not found":
+                    if excp.message is "Message to forward not found":
                         message.reply_text("This message seems to have been lost - I'll remove it "
                                            "from your notes list.")
                         sql.rm_note(chat_id, notename)
@@ -58,7 +58,7 @@ def get(bot, update, notename, show_none=True, no_format=False):
                 try:
                     bot.forward_message(chat_id=chat_id, from_chat_id=chat_id, message_id=note.value)
                 except BadRequest as excp:
-                    if excp.message == "Message to forward not found":
+                    if excp.message is "Message to forward not found":
                         message.reply_text("Looks like the original sender of this note has deleted "
                                            "their message - sorry! Get your bot admin to start using a "
                                            "message dump to avoid this. I'll remove this note from "
@@ -90,7 +90,7 @@ def get(bot, update, notename, show_none=True, no_format=False):
                                                 reply_markup=keyboard)
 
             except BadRequest as excp:
-                if excp.message == "Entity_mention_user_invalid":
+                if excp.message is "Entity_mention_user_invalid":
                     message.reply_text("Looks like you tried to mention someone I've never seen before. If you really "
                                        "want to mention them, forward one of their messages to me, and I'll be able "
                                        "to tag them!")
@@ -111,7 +111,7 @@ def get(bot, update, notename, show_none=True, no_format=False):
 
 @run_async
 def cmd_get(bot: Bot, update: Update, args: List[str]):
-    if len(args) >= 2 and args[1].lower() == "noformat":
+    if len(args) >= 2 and args[1].lower() is "noformat":
         get(bot, update, args[0], show_none=True, no_format=True)
     elif len(args) >= 1:
         get(bot, update, args[0], show_none=True)
@@ -139,7 +139,7 @@ def save(bot: Bot, update: Update):
         msg.reply_text("Dude, there's no note")
         return
     
-    if len(text.strip()) == 0:
+    if len(text.strip()) is 0:
         text = note_name
         
     sql.add_note_to_db(chat_id, note_name, text, data_type, buttons=buttons, file=content)
@@ -187,10 +187,10 @@ def list_notes(bot: Bot, update: Update):
             msg = ""
         msg += note_name
 
-    if msg == "*Notes in chat:*\n":
+    if msg is "*Notes in chat:*\n":
         update.effective_message.reply_text("No notes in this chat!")
 
-    elif len(msg) != 0:
+    elif len(msg) is not 0:
         update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 

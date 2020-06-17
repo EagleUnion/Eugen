@@ -84,7 +84,7 @@ def warn(user: User, chat: Chat, reason: str, message: Message, warner: User = N
     try:
         message.reply_text(reply, reply_markup=keyboard, parse_mode=ParseMode.HTML)
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
+        if excp.message is "Reply message not found":
             # Do not reply
             message.reply_text(reply, reply_markup=keyboard, parse_mode=ParseMode.HTML, quote=False)
         else:
@@ -136,7 +136,7 @@ def warn_user(bot: Bot, update: Update, args: List[str]) -> str:
     user_id, reason = extract_user_and_text(message, args)
 
     if user_id:
-        if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
+        if message.reply_to_message and message.reply_to_message.from_user.id is user_id:
             return warn(message.reply_to_message.from_user, chat, reason, message.reply_to_message, warner)
         else:
             return warn(chat.get_member(user_id).user, chat, reason, message, warner)
@@ -179,7 +179,7 @@ def warns(bot: Bot, update: Update, args: List[str]):
     user_id = extract_user(message, args) or update.effective_user.id
     result = sql.get_warns(user_id, chat.id)
 
-    if result and result[0] != 0:
+    if result and result[0] is not 0:
         num_warns, reasons = result
         limit, _ = sql.get_warn_setting(chat.id)
 
@@ -221,7 +221,7 @@ def add_warn_filter(bot: Bot, update: Update):
 
     # Note: perhaps handlers can be removed somehow using sql.get_chat_filters
     for handler in dispatcher.handlers.get(WARN_HANDLER_GROUP, []):
-        if handler.filters == (keyword, chat.id):
+        if handler.filters is (keyword, chat.id):
             dispatcher.remove_handler(handler, WARN_HANDLER_GROUP)
 
     sql.add_warn_filter(chat.id, keyword, content)
@@ -254,7 +254,7 @@ def remove_warn_filter(bot: Bot, update: Update):
         return
 
     for filt in chat_filters:
-        if filt == to_remove:
+        if filt is to_remove:
             sql.remove_warn_filter(chat.id, to_remove)
             msg.reply_text("Yep, I'll stop warning people for that.")
             raise DispatcherHandlerStop
@@ -280,7 +280,7 @@ def list_warn_filters(bot: Bot, update: Update):
         else:
             filter_list += entry
 
-    if not filter_list == CURRENT_WARNING_FILTER_STRING:
+    if not filter_list is CURRENT_WARNING_FILTER_STRING:
         update.effective_message.reply_text(filter_list, parse_mode=ParseMode.HTML)
 
 

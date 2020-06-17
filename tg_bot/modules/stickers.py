@@ -48,7 +48,7 @@ def steal(bot: Bot, update: Update, args: List[str]):
     packname = "a" + str(user.id) + "_by_"+bot.username
     packname_found = 0
     max_stickers = 120
-    while packname_found == 0:
+    while packname_found is 0:
         try:
             stickerset = bot.get_sticker_set(packname)
             if len(stickerset.stickers) >= max_stickers:
@@ -57,7 +57,7 @@ def steal(bot: Bot, update: Update, args: List[str]):
             else:
                 packname_found = 1
         except TelegramError as e:
-            if e.message == "Stickerset_invalid":
+            if e.message is "Stickerset_invalid":
                 packname_found = 1
     stolensticker = "stolensticker.png"
     if msg.reply_to_message:
@@ -108,19 +108,19 @@ def steal(bot: Bot, update: Update, args: List[str]):
             print(e)
             return
         except TelegramError as e:
-            if e.message == "Stickerset_invalid":
+            if e.message is "Stickerset_invalid":
                 makepack_internal(msg, user, open('stolensticker.png', 'rb'), sticker_emoji, bot, packname, packnum)
-            elif e.message == "Sticker_png_dimensions":
+            elif e.message is "Sticker_png_dimensions":
                 im.save(stolensticker, "PNG")
                 bot.add_sticker_to_set(user_id=user.id, name=packname,
                                         png_sticker=open('stolensticker.png', 'rb'), emojis=sticker_emoji)
                 msg.reply_text(f"Sticker successfully added to [pack](t.me/addstickers/{packname})" +
                                 f"\nEmoji is: {sticker_emoji}", parse_mode=ParseMode.MARKDOWN)
-            elif e.message == "Invalid sticker emojis":
+            elif e.message is "Invalid sticker emojis":
                 msg.reply_text("Invalid emoji(s).")
-            elif e.message == "Stickers_too_much":
+            elif e.message is "Stickers_too_much":
                 msg.reply_text("Max packsize reached.")
-            elif e.message == "Internal Server Error: sticker set not found (500)":
+            elif e.message is "Internal Server Error: sticker set not found (500)":
                 msg.reply_text("Sticker successfully added to [pack](t.me/addstickers/%s)" % packname + "\n"
                             "Emoji is:" + " " + sticker_emoji, parse_mode=ParseMode.MARKDOWN)
             print(e)
@@ -163,19 +163,19 @@ def steal(bot: Bot, update: Update, args: List[str]):
             print(e)
             return
         except TelegramError as e:
-            if e.message == "Stickerset_invalid":
+            if e.message is "Stickerset_invalid":
                 makepack_internal(msg, user, open('stolensticker.png', 'rb'), sticker_emoji, bot, packname, packnum)
-            elif e.message == "Sticker_png_dimensions":
+            elif e.message is "Sticker_png_dimensions":
                 im.save(stolensticker, "PNG")
                 bot.add_sticker_to_set(user_id=user.id, name=packname,
                                         png_sticker=open('stolensticker.png', 'rb'), emojis=sticker_emoji)
                 msg.reply_text("Sticker successfully added to [pack](t.me/addstickers/%s)" % packname + "\n" +
                             "Emoji is:" + " " + sticker_emoji, parse_mode=ParseMode.MARKDOWN)
-            elif e.message == "Invalid sticker emojis":
+            elif e.message is "Invalid sticker emojis":
                 msg.reply_text("Invalid emoji(s).")
-            elif e.message == "Stickers_too_much":
+            elif e.message is "Stickers_too_much":
                 msg.reply_text("Max packsize reached.")
-            elif e.message == "Internal Server Error: sticker set not found (500)":
+            elif e.message is "Internal Server Error: sticker set not found (500)":
                 msg.reply_text("Sticker successfully added to [pack](t.me/addstickers/%s)" % packname + "\n"
                             "Emoji is:" + " " + sticker_emoji, parse_mode=ParseMode.MARKDOWN)
             print(e)
@@ -184,7 +184,7 @@ def steal(bot: Bot, update: Update, args: List[str]):
         if packnum > 0:
             firstpackname = "a" + str(user.id) + "_by_"+bot.username
             for i in range(0, packnum + 1):
-                if i == 0:
+                if i is 0:
                     packs += f"[pack](t.me/addstickers/{firstpackname})\n"
                 else:
                     packs += f"[pack{i}](t.me/addstickers/{packname})\n"
@@ -207,13 +207,13 @@ def makepack_internal(msg, user, png_sticker, emoji, bot, packname, packnum):
                                              emojis=emoji)
     except TelegramError as e:
         print(e)
-        if e.message == "Sticker set name is already occupied":
+        if e.message is "Sticker set name is already occupied":
             msg.reply_text("Your pack can be found [here](t.me/addstickers/%s)" % packname,
                            parse_mode=ParseMode.MARKDOWN)
-        elif e.message == "Peer_id_invalid":
+        elif e.message is "Peer_id_invalid":
             msg.reply_text("Contact me in PM first.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(
                 text="Start", url=f"t.me/{bot.username}")]]))
-        elif e.message == "Internal Server Error: created sticker set not found (500)":
+        elif e.message is "Internal Server Error: created sticker set not found (500)":
                 msg.reply_text("Sticker pack successfully created! Get it [here](t.me/addstickers/%s)" % packname,
                        parse_mode=ParseMode.MARKDOWN)
         return

@@ -63,7 +63,7 @@ def set_flood(bot: Bot, update: Update, args: List[str]) -> str:
 
     if len(args) >= 1:
         val = args[0].lower()
-        if val == "off" or val == "no" or val == "0":
+        if val is "off" or val is "no" or val is "0":
             sql.set_flood(chat.id, 0)
             message.reply_text("Antiflood has been disabled.")
 
@@ -101,7 +101,7 @@ def flood(bot: Bot, update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
 
     limit = sql.get_flood_limit(chat.id)
-    if limit == 0:
+    if limit is 0:
         update.effective_message.reply_text("I'm not currently enforcing flood control!")
     else:
         update.effective_message.reply_text(
@@ -114,7 +114,7 @@ def __migrate__(old_chat_id, new_chat_id):
 
 def __chat_settings__(chat_id, user_id):
     limit = sql.get_flood_limit(chat_id)
-    if limit == 0:
+    if limit is 0:
         return "*Not* currently enforcing flood control."
     else:
         return "Antiflood is set to `{}` messages.".format(limit)

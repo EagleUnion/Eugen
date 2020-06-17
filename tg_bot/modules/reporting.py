@@ -20,7 +20,7 @@ def report_setting(bot: Bot, update: Update, args: List[str]):
     chat = update.effective_chat  # type: Optional[Chat]
     msg = update.effective_message  # type: Optional[Message]
 
-    if chat.type == chat.PRIVATE:
+    if chat.type is chat.PRIVATE:
         if len(args) >= 1:
             if args[0] in ("yes", "on"):
                 sql.set_user_setting(chat.id, True)
@@ -61,7 +61,7 @@ def report(bot: Bot, update: Update) -> str:
         chat_name = chat.title or chat.first or chat.username
         admin_list = chat.get_administrators()
 
-        if chat.username and chat.type == Chat.SUPERGROUP:
+        if chat.username and chat.type is Chat.SUPERGROUP:
             msg = "<b>{}:</b>" \
                   "\n<b>Reported user:</b> {} (<code>{}</code>)" \
                   "\n<b>Reported by:</b> {} (<code>{}</code>)".format(html.escape(chat.title),
