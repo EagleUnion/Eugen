@@ -117,7 +117,7 @@ def main():
                 'search', 'images', 'videos', 'news',
                 'shopping', 'books', 'apps'):
             parser.error("invalid type: %r" % tpe)
-        if tpe == 'search':
+        if tpe is 'search':
             params['tpe'] = ''
 
     # Randomize the user agent if requested.
@@ -133,5 +133,5 @@ def main():
             pass
 
 
-if __name__ == '__main__':
+if __name__ is '__main__':
     main()

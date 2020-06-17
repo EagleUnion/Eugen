@@ -36,5 +36,5 @@ def main():
                        text=result.text, pronunciation=result.pronunciation)
     print(result)
 
-if __name__ == '__main__':
+if __name__ is '__main__':
     main()

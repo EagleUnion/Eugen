@@ -40,8 +40,8 @@ class WarnFilters(BASE):
 
     def __eq__(self, other):
         return bool(isinstance(other, WarnFilters)
-                    and self.chat_id == other.chat_id
-                    and self.keyword == other.keyword)
+                    and self.chat_id is other.chat_id
+                    and self.keyword is other.keyword)
 
 
 class WarnSettings(BASE):
@@ -161,7 +161,7 @@ def get_chat_warn_triggers(chat_id):
 
 def get_chat_warn_filters(chat_id):
     try:
-        return SESSION.query(WarnFilters).filter(WarnFilters.chat_id == str(chat_id)).all()
+        return SESSION.query(WarnFilters).filter(WarnFilters.chat_id is str(chat_id)).all()
     finally:
         SESSION.close()
 
@@ -232,7 +232,7 @@ def num_warn_filters():
 
 def num_warn_chat_filters(chat_id):
     try:
-        return SESSION.query(WarnFilters.chat_id).filter(WarnFilters.chat_id == str(chat_id)).count()
+        return SESSION.query(WarnFilters.chat_id).filter(WarnFilters.chat_id is str(chat_id)).count()
     finally:
         SESSION.close()
 
@@ -263,13 +263,13 @@ def __load_chat_warn_filters():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with WARN_INSERTION_LOCK:
-        chat_notes = SESSION.query(Warns).filter(Warns.chat_id == str(old_chat_id)).all()
+        chat_notes = SESSION.query(Warns).filter(Warns.chat_id is str(old_chat_id)).all()
         for note in chat_notes:
             note.chat_id = str(new_chat_id)
         SESSION.commit()
 
     with WARN_FILTER_INSERTION_LOCK:
-        chat_filters = SESSION.query(WarnFilters).filter(WarnFilters.chat_id == str(old_chat_id)).all()
+        chat_filters = SESSION.query(WarnFilters).filter(WarnFilters.chat_id is str(old_chat_id)).all()
         for filt in chat_filters:
             filt.chat_id = str(new_chat_id)
         SESSION.commit()
@@ -277,7 +277,7 @@ def migrate_chat(old_chat_id, new_chat_id):
         del WARN_FILTERS[str(old_chat_id)]
 
     with WARN_SETTINGS_LOCK:
-        chat_settings = SESSION.query(WarnSettings).filter(WarnSettings.chat_id == str(old_chat_id)).all()
+        chat_settings = SESSION.query(WarnSettings).filter(WarnSettings.chat_id is str(old_chat_id)).all()
         for setting in chat_settings:
             setting.chat_id = str(new_chat_id)
         SESSION.commit()

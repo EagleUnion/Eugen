@@ -23,14 +23,14 @@ if is_module_loaded(FILENAME):
             chat = update.effective_chat  # type: Optional[Chat]
             message = update.effective_message  # type: Optional[Message]
             if result:
-                if chat.type == chat.SUPERGROUP and chat.username:
+                if chat.type is chat.SUPERGROUP and chat.username:
                     result += "\n<b>Link:</b> " \
                               "<a href=\"http://telegram.me/{}/{}\">click here</a>".format(chat.username,
                                                                                            message.message_id)
                 log_chat = sql.get_chat_log_channel(chat.id)
                 if log_chat:
                     send_log(bot, log_chat, chat.id, result)
-            elif result == "":
+            elif result is "":
                 pass
             else:
                 LOGGER.warning("%s was set as loggable, but had no return statement.", func)
@@ -44,7 +44,7 @@ if is_module_loaded(FILENAME):
         try:
             bot.send_message(log_chat_id, result, parse_mode=ParseMode.HTML)
         except BadRequest as excp:
-            if excp.message == "Chat not found":
+            if excp.message is "Chat not found":
                 bot.send_message(orig_chat_id, "This log channel has been deleted - unsetting.")
                 sql.stop_chat_logging(orig_chat_id)
             else:
@@ -78,7 +78,7 @@ if is_module_loaded(FILENAME):
     def setlog(bot: Bot, update: Update):
         message = update.effective_message  # type: Optional[Message]
         chat = update.effective_chat  # type: Optional[Chat]
-        if chat.type == chat.CHANNEL:
+        if chat.type is chat.CHANNEL:
             message.reply_text("Now, forward the /setlog to the group you want to tie this channel to!")
 
         elif message.forward_from_chat:
@@ -86,7 +86,7 @@ if is_module_loaded(FILENAME):
             try:
                 message.delete()
             except BadRequest as excp:
-                if excp.message == "Message to delete not found":
+                if excp.message is "Message to delete not found":
                     pass
                 else:
                     LOGGER.exception("Error deleting message in log channel. Should work anyway though.")
@@ -96,7 +96,7 @@ if is_module_loaded(FILENAME):
                                  "This channel has been set as the log channel for {}.".format(
                                      chat.title or chat.first_name))
             except Unauthorized as excp:
-                if excp.message == "Forbidden: bot is not a member of the channel chat":
+                if excp.message is "Forbidden: bot is not a member of the channel chat":
                     bot.send_message(chat.id, "Successfully set log channel!")
                 else:
                     LOGGER.exception("ERROR in setting the log channel.")

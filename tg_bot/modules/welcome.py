@@ -47,18 +47,18 @@ def send(update, message, keyboard, backup_message):
                                                                   "curly brackets. Please update"),
                                                   parse_mode=ParseMode.MARKDOWN)
     except BadRequest as excp:
-        if excp.message == "Button_url_invalid":
+        if excp.message is "Button_url_invalid":
             msg = update.effective_message.reply_text(markdown_parser(backup_message +
                                                                       "\nNote: the current message has an invalid url "
                                                                       "in one of its buttons. Please update."),
                                                       parse_mode=ParseMode.MARKDOWN)
-        elif excp.message == "Unsupported url protocol":
+        elif excp.message is "Unsupported url protocol":
             msg = update.effective_message.reply_text(markdown_parser(backup_message +
                                                                       "\nNote: the current message has buttons which "
                                                                       "use url protocols that are unsupported by "
                                                                       "telegram. Please update."),
                                                       parse_mode=ParseMode.MARKDOWN)
-        elif excp.message == "Wrong url host":
+        elif excp.message is "Wrong url host":
             msg = update.effective_message.reply_text(markdown_parser(backup_message +
                                                                       "\nNote: the current message has some bad urls. "
                                                                       "Please update."),
@@ -86,23 +86,23 @@ def new_member(bot: Bot, update: Update):
         new_members = update.effective_message.new_chat_members
         for new_mem in new_members:
 
-            if sw != None:
+            if sw is not None:
                 sw_ban = sw.get_ban(new_mem.id)
                 if sw_ban:
                     return
 
             # Give the owner a special welcome
-            if new_mem.id == OWNER_ID:
+            if new_mem.id is OWNER_ID:
                 update.effective_message.reply_text("Master is in the houseeee, let's get this party started!")
                 continue
 
             # Don't welcome yourself
-            elif new_mem.id == bot.id:
+            elif new_mem.id is bot.id:
                 continue
 
             else:
                 # If welcome message is media, send with appropriate function
-                if welc_type != sql.Types.TEXT and welc_type != sql.Types.BUTTON_TEXT:
+                if welc_type is not sql.Types.TEXT and welc_type is not sql.Types.BUTTON_TEXT:
                     ENUM_FUNC_MAP[welc_type](chat.id, cust_welcome)
                     return
                 # else, move on
@@ -155,22 +155,22 @@ def left_member(bot: Bot, update: Update):
         left_mem = update.effective_message.left_chat_member
         if left_mem:
 
-            if sw != None:
+            if sw is not None:
                 sw_ban = sw.get_ban(left_mem.id)
                 if sw_ban:
                     return
                     
             # Ignore bot being kicked
-            if left_mem.id == bot.id:
+            if left_mem.id is bot.id:
                 return
 
             # Give the owner a special goodbye
-            if left_mem.id == OWNER_ID:
+            if left_mem.id is OWNER_ID:
                 update.effective_message.reply_text("RIP Master")
                 return
 
             # if media goodbye, use appropriate function for it
-            if goodbye_type != sql.Types.TEXT and goodbye_type != sql.Types.BUTTON_TEXT:
+            if goodbye_type is not sql.Types.TEXT and goodbye_type is not sql.Types.BUTTON_TEXT:
                 ENUM_FUNC_MAP[goodbye_type](chat.id, cust_goodbye)
                 return
 
@@ -209,15 +209,15 @@ def left_member(bot: Bot, update: Update):
 def welcome(bot: Bot, update: Update, args: List[str]):
     chat = update.effective_chat  # type: Optional[Chat]
     # if no args, show current replies.
-    if len(args) == 0 or args[0].lower() == "noformat":
-        noformat = args and args[0].lower() == "noformat"
+    if len(args) is 0 or args[0].lower() is "noformat":
+        noformat = args and args[0].lower() is "noformat"
         pref, welcome_m, welcome_type = sql.get_welc_pref(chat.id)
         update.effective_message.reply_text(
             "This chat has it's welcome setting set to: `{}`.\n*The welcome message "
             "(not filling the {{}}) is:*".format(pref),
             parse_mode=ParseMode.MARKDOWN)
 
-        if welcome_type == sql.Types.BUTTON_TEXT:
+        if welcome_type is sql.Types.BUTTON_TEXT:
             buttons = sql.get_welc_buttons(chat.id)
             if noformat:
                 welcome_m += revert_buttons(buttons)
@@ -255,15 +255,15 @@ def welcome(bot: Bot, update: Update, args: List[str]):
 def goodbye(bot: Bot, update: Update, args: List[str]):
     chat = update.effective_chat  # type: Optional[Chat]
 
-    if len(args) == 0 or args[0] == "noformat":
-        noformat = args and args[0] == "noformat"
+    if len(args) is 0 or args[0] is "noformat":
+        noformat = args and args[0] is "noformat"
         pref, goodbye_m, goodbye_type = sql.get_gdbye_pref(chat.id)
         update.effective_message.reply_text(
             "This chat has it's goodbye setting set to: `{}`.\n*The goodbye  message "
             "(not filling the {{}}) is:*".format(pref),
             parse_mode=ParseMode.MARKDOWN)
 
-        if goodbye_type == sql.Types.BUTTON_TEXT:
+        if goodbye_type is sql.Types.BUTTON_TEXT:
             buttons = sql.get_gdbye_buttons(chat.id)
             if noformat:
                 goodbye_m += revert_buttons(buttons)

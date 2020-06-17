@@ -87,7 +87,7 @@ def markdown_parser(txt: str, entities: Dict[MessageEntity, str] = None, offset:
             end -= count
 
             # URL handling -> do not escape if in [](), escape otherwise.
-            if ent.type == "url":
+            if ent.type is "url":
                 if any(match.start(1) <= start and end <= match.end(1) for match in LINK_REGEX.finditer(txt)):
                     continue
                 # else, check the escapes between the prev and last and forcefully escape the url to avoid mangling
@@ -96,11 +96,11 @@ def markdown_parser(txt: str, entities: Dict[MessageEntity, str] = None, offset:
                     res += _selective_escape(txt[prev:start] or "") + escape_markdown(ent_text)
 
             # code handling
-            elif ent.type == "code":
+            elif ent.type is "code":
                 res += _selective_escape(txt[prev:start]) + '`' + ent_text + '`'
 
             # handle markdown/html links
-            elif ent.type == "text_link":
+            elif ent.type is "text_link":
                 res += _selective_escape(txt[prev:start]) + "[{}]({})".format(ent_text, ent.url)
 
             end += 1
@@ -124,12 +124,12 @@ def button_markdown_parser(txt: str, entities: Dict[MessageEntity, str] = None, 
         # Check if btnurl is escaped
         n_escapes = 0
         to_check = match.start(1) - 1
-        while to_check > 0 and markdown_note[to_check] == "\\":
+        while to_check > 0 and markdown_note[to_check] is "\\":
             n_escapes += 1
             to_check -= 1
 
         # if even, not escaped -> create button
-        if n_escapes % 2 == 0:
+        if n_escapes % 2 is 0:
             # create a thruple with button label, url, and newline status
             buttons.append((match.group(2), match.group(3), bool(match.group(4))))
             note_data += markdown_note[prev:match.start(1)]
@@ -148,8 +148,8 @@ def escape_invalid_curly_brackets(text: str, valids: List[str]) -> str:
     new_text = ""
     idx = 0
     while idx < len(text):
-        if text[idx] == "{":
-            if idx + 1 < len(text) and text[idx + 1] == "{":
+        if text[idx] is "{":
+            if idx + 1 < len(text) and text[idx + 1] is "{":
                 idx += 2
                 new_text += "{{{{"
                 continue
@@ -166,8 +166,8 @@ def escape_invalid_curly_brackets(text: str, valids: List[str]) -> str:
                 else:
                     new_text += "{{"
 
-        elif text[idx] == "}":
-            if idx + 1 < len(text) and text[idx + 1] == "}":
+        elif text[idx] is "}":
+            if idx + 1 < len(text) and text[idx + 1] is "}":
                 idx += 2
                 new_text += "}}}}"
                 continue
@@ -190,9 +190,9 @@ def split_quotes(text: str) -> List:
     if any(text.startswith(char) for char in START_CHAR):
         counter = 1  # ignore first char -> is some kind of quote
         while counter < len(text):
-            if text[counter] == "\\":
+            if text[counter] is "\\":
                 counter += 1
-            elif text[counter] == text[0] or (text[0] == SMART_OPEN and text[counter] == SMART_CLOSE):
+            elif text[counter] is text[0] or (text[0] is SMART_OPEN and text[counter] is SMART_CLOSE):
                 break
             counter += 1
         else:
@@ -217,7 +217,7 @@ def remove_escapes(text: str) -> str:
         if is_escaped:
             res += text[counter]
             is_escaped = False
-        elif text[counter] == "\\":
+        elif text[counter] is "\\":
             is_escaped = True
         else:
             res += text[counter]
@@ -243,11 +243,11 @@ def extract_time(message, time_val):
             message.reply_text("Invalid time amount specified.")
             return ""
 
-        if unit == 'm':
+        if unit is 'm':
             bantime = int(time.time() + int(time_num) * 60)
-        elif unit == 'h':
+        elif unit is 'h':
             bantime = int(time.time() + int(time_num) * 60 * 60)
-        elif unit == 'd':
+        elif unit is 'd':
             bantime = int(time.time() + int(time_num) * 24 * 60 * 60)
         else:
             # how even...?

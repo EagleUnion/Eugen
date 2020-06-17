@@ -17,7 +17,7 @@ def show_url(bot, update, args):
         tg_feed_link = args[0]
         link_processed = parse(tg_feed_link)
 
-        if link_processed.bozo == 0:
+        if link_processed.bozo is 0:
             feed_title = link_processed.feed.get("title", default="Unknown")
             feed_description = "<i>{}</i>".format(
                 re.sub('<[^<]+?>', '', link_processed.feed.get("description", default="Unknown")))
@@ -62,7 +62,7 @@ def list_urls(bot, update):
     final_content = "\n\n".join(links_list)
 
     # check if the length of the message is too long to be posted in 1 chat bubble
-    if len(final_content) == 0:
+    if len(final_content) is 0:
         bot.send_message(chat_id=tg_chat_id, text="This chat is not subscribed to any links")
     elif len(final_content) <= constants.MAX_MESSAGE_LENGTH:
         bot.send_message(chat_id=tg_chat_id, text="This chat is subscribed to the following links:\n" + final_content)
@@ -82,7 +82,7 @@ def add_url(bot, update, args):
         link_processed = parse(tg_feed_link)
 
         # check if link is a valid RSS Feed link
-        if link_processed.bozo == 0:
+        if link_processed.bozo is 0:
             if len(link_processed.entries[0]) >= 1:
                 tg_old_entry_link = link_processed.entries[0].link
             else:
@@ -113,7 +113,7 @@ def remove_url(bot, update, args):
 
         link_processed = parse(tg_feed_link)
 
-        if link_processed.bozo == 0:
+        if link_processed.bozo is 0:
             user_data = sql.check_url_availability(tg_chat_id, tg_feed_link)
 
             if user_data:
@@ -147,7 +147,7 @@ def rss_update(bot, job):
         # this loop checks for every entry from the RSS Feed link from the DB row
         for entry in feed_processed.entries:
             # check if there are any new updates to the RSS Feed from the old entry
-            if entry.link != tg_old_entry_link:
+            if entry.link is not tg_old_entry_link:
                 new_entry_links.append(entry.link)
                 new_entry_titles.append(entry.title)
             else:
@@ -201,7 +201,7 @@ def rss_set(bot, job):
         # this loop checks for every entry from the RSS Feed link from the DB row
         for entry in feed_processed.entries:
             # check if there are any new updates to the RSS Feed from the old entry
-            if entry.link != tg_old_entry_link:
+            if entry.link is not tg_old_entry_link:
                 new_entry_links.append(entry.link)
                 new_entry_titles.append(entry.title)
             else:

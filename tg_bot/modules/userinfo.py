@@ -40,7 +40,7 @@ def set_about_me(bot: Bot, update: Update):
     user_id = message.from_user.id
     text = message.text
     info = text.split(None, 1)  # use python's maxsplit to only remove the cmd, hence keeping newlines.
-    if len(info) == 2:
+    if len(info) is 2:
         if len(info[1]) < MAX_MESSAGE_LENGTH // 4:
             sql.set_user_me_info(user_id, info[1])
             message.reply_text("Updated your info!")
@@ -78,16 +78,16 @@ def set_about_bio(bot: Bot, update: Update):
     if message.reply_to_message:
         repl_message = message.reply_to_message
         user_id = repl_message.from_user.id
-        if user_id == message.from_user.id:
+        if user_id is message.from_user.id:
             message.reply_text("Ha, you can't set your own bio! You're at the mercy of others here...")
             return
-        elif user_id == bot.id and sender.id not in SUDO_USERS:
+        elif user_id is bot.id and sender.id not in SUDO_USERS:
             message.reply_text("Erm... yeah, I only trust sudo users to set my bio.")
             return
 
         text = message.text
         bio = text.split(None, 1)  # use python's maxsplit to only remove the cmd, hence keeping newlines.
-        if len(bio) == 2:
+        if len(bio) is 2:
             if len(bio[1]) < MAX_MESSAGE_LENGTH // 4:
                 sql.set_user_bio(user_id, bio[1])
                 message.reply_text("Updated {}'s bio!".format(repl_message.from_user.first_name))

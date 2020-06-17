@@ -127,9 +127,9 @@ def test(bot: Bot, update: Update):
 
 @run_async
 def start(bot: Bot, update: Update, args: List[str]):
-    if update.effective_chat.type == "private":
+    if update.effective_chat.type is "private":
         if len(args) >= 1:
-            if args[0].lower() == "help":
+            if args[0].lower() is "help":
                 send_help(update.effective_chat.id, HELP_STRINGS)
 
             elif args[0].lower().startswith("stngs_"):
@@ -224,11 +224,11 @@ def help_button(bot: Bot, update: Update):
         bot.answer_callback_query(query.id)
         query.message.delete()
     except BadRequest as excp:
-        if excp.message == "Message is not modified":
+        if excp.message is "Message is not modified":
             pass
-        elif excp.message == "Query_id_invalid":
+        elif excp.message is "Query_id_invalid":
             pass
-        elif excp.message == "Message can't be deleted":
+        elif excp.message is "Message can't be deleted":
             pass
         else:
             LOGGER.exception("Exception in help buttons. %s", str(query.data))
@@ -240,7 +240,7 @@ def get_help(bot: Bot, update: Update):
     args = update.effective_message.text.split(None, 1)
 
     # ONLY send help in PM
-    if chat.type != chat.PRIVATE:
+    if chat.type is not chat.PRIVATE:
 
         update.effective_message.reply_text("Contact me in PM to get the list of possible commands.",
                                             reply_markup=InlineKeyboardMarkup(
@@ -249,7 +249,7 @@ def get_help(bot: Bot, update: Update):
                                                                            bot.username))]]))
         return
 
-    elif len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
+    elif len(args) >= 2 and any(args[1].lower() is x for x in HELPABLE):
         module = args[1].lower()
         text = "Here is the available help for the *{}* module:\n".format(HELPABLE[module].__mod_name__) \
                + HELPABLE[module].__help__
@@ -341,11 +341,11 @@ def settings_button(bot: Bot, update: Update):
         bot.answer_callback_query(query.id)
         query.message.delete()
     except BadRequest as excp:
-        if excp.message == "Message is not modified":
+        if excp.message is "Message is not modified":
             pass
-        elif excp.message == "Query_id_invalid":
+        elif excp.message is "Query_id_invalid":
             pass
-        elif excp.message == "Message can't be deleted":
+        elif excp.message is "Message can't be deleted":
             pass
         else:
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
@@ -359,7 +359,7 @@ def get_settings(bot: Bot, update: Update):
     msg.text.split(None, 1)
 
     # ONLY send settings in PM
-    if chat.type != chat.PRIVATE:
+    if chat.type is not chat.PRIVATE:
         if is_user_admin(chat, user.id):
             text = "Click here to get this chat's settings, as well as yours."
             msg.reply_text(text,
@@ -379,10 +379,10 @@ def donate(bot: Bot, update: Update):
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
 
-    if chat.type == "private":
+    if chat.type is "private":
         update.effective_message.reply_text(DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
 
-        if OWNER_ID != 254318997 and DONATION_LINK:
+        if OWNER_ID is not 254318997 and DONATION_LINK:
             update.effective_message.reply_text("You can also donate to the person currently running me "
                                                 "[here]({})".format(DONATION_LINK),
                                                 parse_mode=ParseMode.MARKDOWN)
@@ -516,6 +516,6 @@ def process_update(self, update):
             self.logger.exception('An uncaught error was raised while processing the update')
 
 
-if __name__ == '__main__':
+if __name__ is '__main__':
     LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
     main()

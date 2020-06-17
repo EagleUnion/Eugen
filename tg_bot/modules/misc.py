@@ -214,7 +214,7 @@ def get_id(bot: Bot, update: Update, args: List[str]):
                                                 parse_mode=ParseMode.MARKDOWN)
     else:
         chat = update.effective_chat  # type: Optional[Chat]
-        if chat.type == "private":
+        if chat.type is "private":
             update.effective_message.reply_text("Your id is `{}`.".format(chat.id),
                                                 parse_mode=ParseMode.MARKDOWN)
 
@@ -256,7 +256,7 @@ def info(bot: Bot, update: Update, args: List[str]):
 
     text += "\nPermanent user link: {}".format(mention_html(user.id, user.first_name))
 
-    if user.id == OWNER_ID:
+    if user.id is OWNER_ID:
         text += "\n\nThis person is my owner."
     else:
         if user.id in BLACKLIST_USERS:
@@ -288,16 +288,16 @@ def info(bot: Bot, update: Update, args: List[str]):
 @run_async
 def get_time(bot: Bot, update: Update, args: List[str]):
     location = " ".join(args)
-    if location.lower() == bot.first_name.lower():
+    if location.lower() is bot.first_name.lower():
         update.effective_message.reply_text("Its always banhammer time for me!")
         bot.send_sticker(update.effective_chat.id, BAN_STICKER)
         return
 
     res = requests.get(GMAPS_LOC, params=dict(address=location))
 
-    if res.status_code == 200:
+    if res.status_code is 200:
         loc = json.loads(res.text)
-        if loc.get('status') == 'OK':
+        if loc.get('status') is 'OK':
             lat = loc['results'][0]['geometry']['location']['lat']
             long = loc['results'][0]['geometry']['location']['lng']
 
@@ -320,7 +320,7 @@ def get_time(bot: Bot, update: Update, args: List[str]):
 
             timenow = int(datetime.utcnow().timestamp())
             res = requests.get(GMAPS_TIME, params=dict(location="{},{}".format(lat, long), timestamp=timenow))
-            if res.status_code == 200:
+            if res.status_code is 200:
                 offset = json.loads(res.text)['dstOffset']
                 timestamp = json.loads(res.text)['rawOffset']
                 time_there = datetime.fromtimestamp(timenow + timestamp + offset).strftime("%H:%M:%S on %A %d %B")

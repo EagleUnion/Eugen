@@ -20,7 +20,7 @@ function deactivate  -d "Exit virtualenv and return to normal shell environment"
     end
 
     set -e VIRTUAL_ENV
-    if test "$argv[1]" != "nondestructive"
+    if test "$argv[1]" is not "nondestructive"
         # Self destruct!
         functions -e deactivate
     end

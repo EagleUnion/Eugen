@@ -34,7 +34,7 @@ def ban(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == "User not found":
+        if excp.message is "User not found":
             message.reply_text("I can't seem to find this user")
             return ""
         else:
@@ -44,7 +44,7 @@ def ban(bot: Bot, update: Update, args: List[str]) -> str:
         message.reply_text("I really wish I could ban admins...")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("I'm not gonna BAN myself, are you crazy?")
         return ""
 
@@ -65,7 +65,7 @@ def ban(bot: Bot, update: Update, args: List[str]) -> str:
         return log
 
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
+        if excp.message is "Reply message not found":
             # Do not reply
             message.reply_text('Banned!', quote=False)
             return log
@@ -97,7 +97,7 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == "User not found":
+        if excp.message is "User not found":
             message.reply_text("I can't seem to find this user")
             return ""
         else:
@@ -107,7 +107,7 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
         message.reply_text("I really wish I could ban admins...")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("I'm not gonna BAN myself, are you crazy?")
         return ""
 
@@ -147,7 +147,7 @@ def temp_ban(bot: Bot, update: Update, args: List[str]) -> str:
         return log
 
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
+        if excp.message is "Reply message not found":
             # Do not reply
             message.reply_text("Banned! User will be banned for {}.".format(time_val), quote=False)
             return log
@@ -178,7 +178,7 @@ def kick(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == "User not found":
+        if excp.message is "User not found":
             message.reply_text("I can't seem to find this user")
             return ""
         else:
@@ -188,7 +188,7 @@ def kick(bot: Bot, update: Update, args: List[str]) -> str:
         message.reply_text("I really wish I could kick admins...")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("Yeahhh I'm not gonna do that")
         return ""
 
@@ -248,13 +248,13 @@ def unban(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == "User not found":
+        if excp.message is "User not found":
             message.reply_text("I can't seem to find this user")
             return ""
         else:
             raise
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("How would I unban myself if I wasn't here...?")
         return ""
 

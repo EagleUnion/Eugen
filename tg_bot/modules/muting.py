@@ -28,7 +28,7 @@ def mute(bot: Bot, update: Update, args: List[str]) -> str:
         message.reply_text("You'll need to either give me a username to mute, or reply to someone to be muted.")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("I'm not muting myself!")
         return ""
 
@@ -77,7 +77,7 @@ def unmute(bot: Bot, update: Update, args: List[str]) -> str:
             message.reply_text("This is an admin, what do you expect me to do?")
             return ""
 
-        elif member.status != 'kicked' and member.status != 'left':
+        elif member.status is not 'kicked' and member.status is not 'left':
             if member.can_send_messages and member.can_send_media_messages \
                     and member.can_send_other_messages and member.can_add_web_page_previews:
                 message.reply_text("This user already has the right to speak.")
@@ -121,7 +121,7 @@ def temp_mute(bot: Bot, update: Update, args: List[str]) -> str:
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == "User not found":
+        if excp.message is "User not found":
             message.reply_text("I can't seem to find this user")
             return ""
         else:
@@ -131,7 +131,7 @@ def temp_mute(bot: Bot, update: Update, args: List[str]) -> str:
         message.reply_text("I really wish I could mute admins...")
         return ""
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("I'm not gonna MUTE myself, are you crazy?")
         return ""
 
@@ -170,7 +170,7 @@ def temp_mute(bot: Bot, update: Update, args: List[str]) -> str:
             message.reply_text("This user is already muted.")
 
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
+        if excp.message is "Reply message not found":
             # Do not reply
             message.reply_text("Muted for {}!".format(time_val), quote=False)
             return log

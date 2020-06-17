@@ -39,7 +39,7 @@ def list_handlers(bot: Bot, update: Update):
         else:
             filter_list += entry
 
-    if not filter_list == BASIC_FILTER_STRING:
+    if not filter_list is BASIC_FILTER_STRING:
         update.effective_message.reply_text(filter_list, parse_mode=telegram.ParseMode.MARKDOWN)
 
 
@@ -107,7 +107,7 @@ def filters(bot: Bot, update: Update):
     # Add the filter
     # Note: perhaps handlers can be removed somehow using sql.get_chat_filters
     for handler in dispatcher.handlers.get(HANDLER_GROUP, []):
-        if handler.filters == (keyword, chat.id):
+        if handler.filters is (keyword, chat.id):
             dispatcher.remove_handler(handler, HANDLER_GROUP)
 
     sql.add_filter(chat.id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video,
@@ -133,7 +133,7 @@ def stop_filter(bot: Bot, update: Update):
         return
 
     for keyword in chat_filters:
-        if keyword == args[1]:
+        if keyword is args[1]:
             sql.remove_filter(chat.id, args[1])
             update.effective_message.reply_text("Yep, I'll stop replying to that.")
             raise DispatcherHandlerStop
@@ -176,11 +176,11 @@ def reply_filter(bot: Bot, update: Update):
                                        disable_web_page_preview=True,
                                        reply_markup=keyboard)
                 except BadRequest as excp:
-                    if excp.message == "Unsupported url protocol":
+                    if excp.message is "Unsupported url protocol":
                         message.reply_text("You seem to be trying to use an unsupported url protocol. Telegram "
                                            "doesn't support buttons for some protocols, such as tg://. Please try "
                                            "again, or ask in @MarieSupport for help.")
-                    elif excp.message == "Reply message not found":
+                    elif excp.message is "Reply message not found":
                         bot.send_message(chat.id, filt.reply, parse_mode=ParseMode.MARKDOWN,
                                          disable_web_page_preview=True,
                                          reply_markup=keyboard)

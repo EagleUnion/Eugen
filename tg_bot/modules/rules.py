@@ -25,7 +25,7 @@ def send_rules(update, chat_id, from_pm=False):
     try:
         chat = bot.get_chat(chat_id)
     except BadRequest as excp:
-        if excp.message == "Chat not found" and from_pm:
+        if excp.message is "Chat not found" and from_pm:
             bot.send_message(user.id, "The rules shortcut for this chat hasn't been set properly! Ask admins to "
                                       "fix this.")
             return
@@ -58,7 +58,7 @@ def set_rules(bot: Bot, update: Update):
     msg = update.effective_message  # type: Optional[Message]
     raw_text = msg.text
     args = raw_text.split(None, 1)  # use python's maxsplit to separate cmd and args
-    if len(args) == 2:
+    if len(args) is 2:
         txt = args[1]
         offset = len(txt) - len(raw_text)  # set correct offset relative to command
         markdown_rules = markdown_parser(txt, entities=msg.parse_entities(), offset=offset)

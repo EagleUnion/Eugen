@@ -116,7 +116,7 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
 
             elif args[0] in RESTRICTION_TYPES:
                 sql.update_restriction(chat.id, args[0], locked=True)
-                if args[0] == "previews":
+                if args[0] is "previews":
                     members = users_sql.get_chat_members(str(chat.id))
                     restr_members(bot, chat.id, members, messages=True, media=True, other=True)
 
@@ -158,19 +158,19 @@ def unlock(bot: Bot, update: Update, args: List[str]) -> str:
                 sql.update_restriction(chat.id, args[0], locked=False)
                 """
                 members = users_sql.get_chat_members(chat.id)
-                if args[0] == "messages":
+                if args[0] is "messages":
                     unrestr_members(bot, chat.id, members, media=False, other=False, previews=False)
 
-                elif args[0] == "media":
+                elif args[0] is "media":
                     unrestr_members(bot, chat.id, members, other=False, previews=False)
 
-                elif args[0] == "other":
+                elif args[0] is "other":
                     unrestr_members(bot, chat.id, members, previews=False)
 
-                elif args[0] == "previews":
+                elif args[0] is "previews":
                     unrestr_members(bot, chat.id, members)
 
-                elif args[0] == "all":
+                elif args[0] is "all":
                     unrestr_members(bot, chat.id, members, True, True, True, True)
                 """
                 message.reply_text("Unlocked {} for everyone!".format(args[0]))
@@ -197,7 +197,7 @@ def del_lockables(bot: Bot, update: Update):
 
     for lockable, filter in LOCK_TYPES.items():
         if filter(message) and sql.is_locked(chat.id, lockable) and can_delete(chat, bot.id):
-            if lockable == "bots":
+            if lockable is "bots":
                 new_members = update.effective_message.new_chat_members
                 for new_mem in new_members:
                     if new_mem.is_bot:
@@ -212,7 +212,7 @@ def del_lockables(bot: Bot, update: Update):
                 try:
                     message.delete()
                 except BadRequest as excp:
-                    if excp.message == "Message to delete not found":
+                    if excp.message is "Message to delete not found":
                         pass
                     else:
                         LOGGER.exception("ERROR in lockables")
@@ -230,7 +230,7 @@ def rest_handler(bot: Bot, update: Update):
             try:
                 msg.delete()
             except BadRequest as excp:
-                if excp.message == "Message to delete not found":
+                if excp.message is "Message to delete not found":
                     pass
                 else:
                     LOGGER.exception("ERROR in restrictions")

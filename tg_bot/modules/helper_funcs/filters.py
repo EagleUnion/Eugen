@@ -23,7 +23,7 @@ class CustomFilters(object):
             self.name = "CustomFilters.mime_type({})".format(self.mime_type)
 
         def filter(self, message: Message):
-            return bool(message.document and message.document.mime_type == self.mime_type)
+            return bool(message.document and message.document.mime_type is self.mime_type)
 
     mime_type = _MimeType
 

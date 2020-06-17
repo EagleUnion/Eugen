@@ -28,7 +28,7 @@ class CustomCommandHandler(tg.CommandHandler):
                         res = self.filters(message)
 
                     return res and (command[0].lower() in self.command
-                                    and command[1].lower() == message.bot.username.lower())
+                                    and command[1].lower() is message.bot.username.lower())
 
             return False
 

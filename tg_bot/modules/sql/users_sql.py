@@ -94,8 +94,8 @@ def update_user(user_id, username, chat_id=None, chat_name=None):
         else:
             chat.chat_name = chat_name
 
-        member = SESSION.query(ChatMembers).filter(ChatMembers.chat == chat.chat_id,
-                                                   ChatMembers.user == user.user_id).first()
+        member = SESSION.query(ChatMembers).filter(ChatMembers.chat is chat.chat_id,
+                                                   ChatMembers.user is user.user_id).first()
         if not member:
             chat_member = ChatMembers(chat.chat_id, user.user_id)
             SESSION.add(chat_member)
@@ -105,21 +105,21 @@ def update_user(user_id, username, chat_id=None, chat_name=None):
 
 def get_userid_by_name(username):
     try:
-        return SESSION.query(Users).filter(func.lower(Users.username) == username.lower()).all()
+        return SESSION.query(Users).filter(func.lower(Users.username) is username.lower()).all()
     finally:
         SESSION.close()
 
 
 def get_name_by_userid(user_id):
     try:
-        return SESSION.query(Users).get(Users.user_id == int(user_id)).first()
+        return SESSION.query(Users).get(Users.user_id is int(user_id)).first()
     finally:
         SESSION.close()
 
 
 def get_chat_members(chat_id):
     try:
-        return SESSION.query(ChatMembers).filter(ChatMembers.chat == str(chat_id)).all()
+        return SESSION.query(ChatMembers).filter(ChatMembers.chat is str(chat_id)).all()
     finally:
         SESSION.close()
 
@@ -133,7 +133,7 @@ def get_all_chats():
 
 def get_user_num_chats(user_id):
     try:
-        return SESSION.query(ChatMembers).filter(ChatMembers.user == int(user_id)).count()
+        return SESSION.query(ChatMembers).filter(ChatMembers.user is int(user_id)).count()
     finally:
         SESSION.close()
 
@@ -161,7 +161,7 @@ def migrate_chat(old_chat_id, new_chat_id):
 
         SESSION.flush()
 
-        chat_members = SESSION.query(ChatMembers).filter(ChatMembers.chat == str(old_chat_id)).all()
+        chat_members = SESSION.query(ChatMembers).filter(ChatMembers.chat is str(old_chat_id)).all()
         for member in chat_members:
             member.chat = str(new_chat_id)
             SESSION.add(member)
@@ -180,7 +180,7 @@ def del_user(user_id):
             SESSION.commit()
             return True
 
-        ChatMembers.query.filter(ChatMembers.user == user_id).delete()
+        ChatMembers.query.filter(ChatMembers.user is user_id).delete()
         SESSION.commit()
         SESSION.close()
     return False

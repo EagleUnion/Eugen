@@ -28,18 +28,18 @@ def get_user_id(username):
     if not users:
         return None
 
-    elif len(users) == 1:
+    elif len(users) is 1:
         return users[0].user_id
 
     else:
         for user_obj in users:
             try:
                 userdat = dispatcher.bot.get_chat(user_obj.user_id)
-                if userdat.username == username:
+                if userdat.username is username:
                     return userdat.id
 
             except BadRequest as excp:
-                if excp.message == 'Chat not found':
+                if excp.message is 'Chat not found':
                     pass
                 else:
                     LOGGER.exception("Error extracting user ID")
@@ -100,7 +100,7 @@ def chats(bot: Bot, update: Update):
 
 
 def __user_info__(user_id):
-    if user_id == dispatcher.bot.id:
+    if user_id is dispatcher.bot.id:
         return """I've seen them in... Wow. Are they stalking me? They're in all the same places I am... oh. It's me."""
     num_chats = sql.get_user_num_chats(user_id)
     return """I've seen them in <code>{}</code> chats in total.""".format(num_chats)

@@ -13,7 +13,7 @@ def __list_all_modules():
     if LOAD or NO_LOAD:
         to_load = LOAD
         if to_load:
-            if not all(any(mod == module_name for module_name in all_modules) for mod in to_load):
+            if not all(any(mod is module_name for module_name in all_modules) for mod in to_load):
                 LOGGER.error("Invalid loadorder names. Quitting.")
                 quit(1)
 

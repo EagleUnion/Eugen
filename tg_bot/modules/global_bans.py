@@ -62,7 +62,7 @@ def gban(bot: Bot, update: Update, args: List[str]):
         message.reply_text("OOOH someone's trying to gban a support user! *grabs popcorn*")
         return
 
-    if user_id == bot.id:
+    if user_id is bot.id:
         message.reply_text("-_- So funny, lets gban myself why don't I? Nice try.")
         return
 
@@ -72,7 +72,7 @@ def gban(bot: Bot, update: Update, args: List[str]):
         message.reply_text(excp.message)
         return
 
-    if user_chat.type != 'private':
+    if user_chat.type is not 'private':
         message.reply_text("That's not a user!")
         return
 
@@ -138,7 +138,7 @@ def ungban(bot: Bot, update: Update, args: List[str]):
         return
 
     user_chat = bot.get_chat(user_id)
-    if user_chat.type != 'private':
+    if user_chat.type is not 'private':
         message.reply_text("That's not a user!")
         return
 
@@ -165,7 +165,7 @@ def ungban(bot: Bot, update: Update, args: List[str]):
 
         try:
             member = bot.get_chat_member(chat_id, user_id)
-            if member.status == 'kicked':
+            if member.status is 'kicked':
                 bot.unban_chat_member(chat_id, user_id)
 
         except BadRequest as excp:
