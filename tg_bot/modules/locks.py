@@ -65,8 +65,6 @@ tg.CommandHandler = CustomCommandHandler
 # NOT ASYNC
 def restr_members(bot, chat_id, members, messages=False, media=False, other=False, previews=False):
     for mem in members:
-        if mem.user in SUDO_USERS:
-            pass
         try:
             bot.restrict_chat_member(chat_id, mem.user,
                                      can_send_messages=messages,
@@ -100,10 +98,10 @@ def locktypes(bot: Bot, update: Update):
 @loggable
 def lock(bot: Bot, update: Update, args: List[str]) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
     if can_delete(chat, bot.id):
         if len(args) >= 1:
+            user = update.effective_user  # type: Optional[User]
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=True)
                 message.reply_text("Locked {} messages for all non-admins!".format(args[0]))
@@ -141,10 +139,10 @@ def lock(bot: Bot, update: Update, args: List[str]) -> str:
 @loggable
 def unlock(bot: Bot, update: Update, args: List[str]) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
     if is_user_admin(chat, message.from_user.id):
         if len(args) >= 1:
+            user = update.effective_user  # type: Optional[User]
             if args[0] in LOCK_TYPES:
                 sql.update_lock(chat.id, args[0], locked=False)
                 message.reply_text("Unlocked {} for everyone!".format(args[0]))
@@ -212,9 +210,7 @@ def del_lockables(bot: Bot, update: Update):
                 try:
                     message.delete()
                 except BadRequest as excp:
-                    if excp.message == "Message to delete not found":
-                        pass
-                    else:
+                    if excp.message != "Message to delete not found":
                         LOGGER.exception("ERROR in lockables")
 
             break
@@ -230,9 +226,7 @@ def rest_handler(bot: Bot, update: Update):
             try:
                 msg.delete()
             except BadRequest as excp:
-                if excp.message == "Message to delete not found":
-                    pass
-                else:
+                if excp.message != "Message to delete not found":
                     LOGGER.exception("ERROR in restrictions")
             break
 
@@ -240,34 +234,34 @@ def rest_handler(bot: Bot, update: Update):
 def build_lock_message(chat_id):
     locks = sql.get_locks(chat_id)
     restr = sql.get_restr(chat_id)
-    if not (locks or restr):
-        res = "There are no current locks in this chat."
-    else:
+    if (locks or restr):
         res = "These are the locks in this chat:"
-        if locks:
-            res += "\n - sticker = `{}`" \
-                   "\n - audio = `{}`" \
-                   "\n - voice = `{}`" \
-                   "\n - document = `{}`" \
-                   "\n - video = `{}`" \
-                   "\n - videonote = `{}`" \
-                   "\n - contact = `{}`" \
-                   "\n - photo = `{}`" \
-                   "\n - gif = `{}`" \
-                   "\n - url = `{}`" \
-                   "\n - bots = `{}`" \
-                   "\n - forward = `{}`" \
-                   "\n - game = `{}`" \
-                   "\n - location = `{}`".format(locks.sticker, locks.audio, locks.voice, locks.document,
-                                                 locks.video, locks.videonote, locks.contact, locks.photo, locks.gif, locks.url,
-                                                 locks.bots, locks.forward, locks.game, locks.location)
-        if restr:
-            res += "\n - messages = `{}`" \
-                   "\n - media = `{}`" \
-                   "\n - other = `{}`" \
-                   "\n - previews = `{}`" \
-                   "\n - all = `{}`".format(restr.messages, restr.media, restr.other, restr.preview,
-                                            all([restr.messages, restr.media, restr.other, restr.preview]))
+    else:
+        res = "There are no current locks in this chat."
+    if locks:
+        res += "\n - sticker = `{}`" \
+               "\n - audio = `{}`" \
+               "\n - voice = `{}`" \
+               "\n - document = `{}`" \
+               "\n - video = `{}`" \
+               "\n - videonote = `{}`" \
+               "\n - contact = `{}`" \
+               "\n - photo = `{}`" \
+               "\n - gif = `{}`" \
+               "\n - url = `{}`" \
+               "\n - bots = `{}`" \
+               "\n - forward = `{}`" \
+               "\n - game = `{}`" \
+               "\n - location = `{}`".format(locks.sticker, locks.audio, locks.voice, locks.document,
+                                             locks.video, locks.videonote, locks.contact, locks.photo, locks.gif, locks.url,
+                                             locks.bots, locks.forward, locks.game, locks.location)
+    if restr:
+        res += "\n - messages = `{}`" \
+               "\n - media = `{}`" \
+               "\n - other = `{}`" \
+               "\n - previews = `{}`" \
+               "\n - all = `{}`".format(restr.messages, restr.media, restr.other, restr.preview,
+                                        all([restr.messages, restr.media, restr.other, restr.preview]))
     return res
 
 

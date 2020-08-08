@@ -491,10 +491,7 @@ class SandboxedFormatterMixin(object):
         first, rest = formatter_field_name_split(field_name)
         obj = self.get_value(first, args, kwargs)
         for is_attr, i in rest:
-            if is_attr:
-                obj = self._env.getattr(obj, i)
-            else:
-                obj = self._env.getitem(obj, i)
+            obj = self._env.getattr(obj, i) if is_attr else self._env.getitem(obj, i)
         return obj, first
 
 

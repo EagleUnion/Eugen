@@ -17,11 +17,7 @@ def about_me(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message  # type: Optional[Message]
     user_id = extract_user(message, args)
 
-    if user_id:
-        user = bot.get_chat(user_id)
-    else:
-        user = message.from_user
-
+    user = bot.get_chat(user_id) if user_id else message.from_user
     info = sql.get_user_me_info(user.id)
 
     if info:
@@ -37,10 +33,10 @@ def about_me(bot: Bot, update: Update, args: List[str]):
 @run_async
 def set_about_me(bot: Bot, update: Update):
     message = update.effective_message  # type: Optional[Message]
-    user_id = message.from_user.id
     text = message.text
     info = text.split(None, 1)  # use python's maxsplit to only remove the cmd, hence keeping newlines.
     if len(info) == 2:
+        user_id = message.from_user.id
         if len(info[1]) < MAX_MESSAGE_LENGTH // 4:
             sql.set_user_me_info(user_id, info[1])
             message.reply_text("Updated your info!")
@@ -54,11 +50,7 @@ def about_bio(bot: Bot, update: Update, args: List[str]):
     message = update.effective_message  # type: Optional[Message]
 
     user_id = extract_user(message, args)
-    if user_id:
-        user = bot.get_chat(user_id)
-    else:
-        user = message.from_user
-
+    user = bot.get_chat(user_id) if user_id else message.from_user
     info = sql.get_user_bio(user.id)
 
     if info:

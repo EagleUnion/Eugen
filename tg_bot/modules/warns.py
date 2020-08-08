@@ -152,14 +152,14 @@ def warn_user(bot: Bot, update: Update, args: List[str]) -> str:
 def reset_warns(bot: Bot, update: Update, args: List[str]) -> str:
     message = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
-
     user_id = extract_user(message, args)
 
     if user_id:
         sql.reset_warns(user_id, chat.id)
         message.reply_text("Warnings have been reset!")
         warned = chat.get_member(user_id).user
+        user = update.effective_user  # type: Optional[User]
+
         return "<b>{}:</b>" \
                "\n#RESETWARNS" \
                "\n<b>Admin:</b> {}" \
@@ -280,7 +280,7 @@ def list_warn_filters(bot: Bot, update: Update):
         else:
             filter_list += entry
 
-    if not filter_list == CURRENT_WARNING_FILTER_STRING:
+    if filter_list != CURRENT_WARNING_FILTER_STRING:
         update.effective_message.reply_text(filter_list, parse_mode=ParseMode.HTML)
 
 

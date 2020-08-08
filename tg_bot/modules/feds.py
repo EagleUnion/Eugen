@@ -68,7 +68,7 @@ def new_fed(bot: Bot, update: Update):
 		update.effective_message.reply_text("Please run this command in my PM only!")
 		return
 	fednam = message.text.split(None, 1)[1]
-	if not fednam == '':
+	if fednam != '':
 		fed_id = str(uuid.uuid4())
 		fed_name = fednam
 		LOGGER.info(fed_id)
@@ -149,41 +149,37 @@ def fed_chat(bot: Bot, update: Update, args: List[str]):
 
 
 def join_fed(bot: Bot, update: Update, args: List[str]):
-    chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
-    message = update.effective_message
-    administrators = chat.get_administrators()
-    fed_id = sql.get_fed_id(chat.id)
+	chat = update.effective_chat  # type: Optional[Chat]
+	user = update.effective_user  # type: Optional[User]
+	message = update.effective_message
+	administrators = chat.get_administrators()
+	fed_id = sql.get_fed_id(chat.id)
 
-    if user.id in SUDO_USERS:
-        pass
-    else:
-        for admin in administrators:
-            status = admin.status
-            if status == "creator":
-                print(admin)
-                if str(admin.user.id) == str(user.id):
-                    pass
-                else:
-                    update.effective_message.reply_text("Only the group creator can do it!")
-                    return
-    if fed_id:
-        message.reply_text("Uh, you can only join one federation in a chat.")
-        return
+	if user.id not in SUDO_USERS:
+		for admin in administrators:
+			status = admin.status
+			if status == "creator":
+				print(admin)
+				if str(admin.user.id) != str(user.id):
+					update.effective_message.reply_text("Only the group creator can do it!")
+					return
+	if fed_id:
+	    message.reply_text("Uh, you can only join one federation in a chat.")
+	    return
 
-    if len(args) >= 1:
-        fedd = args[0]
-        print(fedd)
-        if sql.search_fed_by_id(fedd) is False:
-            message.reply_text("Please enter a valid federation ID.")
-            return
+	if len(args) >= 1:
+	    fedd = args[0]
+	    print(fedd)
+	    if sql.search_fed_by_id(fedd) is False:
+	        message.reply_text("Please enter a valid federation ID.")
+	        return
 
-        x = sql.chat_join_fed(fedd, chat.id)
-        if not x:
-                message.reply_text("Failed to join federation! Please head to @PhoenixSupport to report this.")
-                return
+	    x = sql.chat_join_fed(fedd, chat.id)
+	    if not x:
+	            message.reply_text("Failed to join federation! Please head to @PhoenixSupport to report this.")
+	            return
 
-        message.reply_text("Chat successfully added to federation!")
+	    message.reply_text("Chat successfully added to federation!")
 
 
 @run_async
@@ -216,9 +212,9 @@ def user_join_fed(bot: Bot, update: Update, args: List[str]):
 			user = bot.get_chat(user_id)
 		elif not msg.reply_to_message and not args:
 			user = msg.from_user
-		elif not msg.reply_to_message and (not args or (
-			len(args) >= 1 and not args[0].startswith("@") and not args[0].isdigit() and not msg.parse_entities(
-			[MessageEntity.TEXT_MENTION]))):
+		elif (not msg.reply_to_message and len(args) >= 1
+		      and not args[0].startswith("@") and not args[0].isdigit()
+		      and not msg.parse_entities([MessageEntity.TEXT_MENTION])):
 			msg.reply_text("I cannot extract users from this message.")
 			return
 		else:
@@ -261,9 +257,9 @@ def user_demote_fed(bot: Bot, update: Update, args: List[str]):
 		elif not msg.reply_to_message and not args:
 			user = msg.from_user
 
-		elif not msg.reply_to_message and (not args or (
-			len(args) >= 1 and not args[0].startswith("@") and not args[0].isdigit() and not msg.parse_entities(
-			[MessageEntity.TEXT_MENTION]))):
+		elif (not msg.reply_to_message and len(args) >= 1
+		      and not args[0].startswith("@") and not args[0].isdigit()
+		      and not msg.parse_entities([MessageEntity.TEXT_MENTION])):
 			msg.reply_text("I cannot extract users from this message.")
 			return
 		else:
@@ -452,9 +448,7 @@ def fed_ban(bot: Bot, update: Update, args: List[str]):
 			try:
 				bot.kick_chat_member(chat, user_id)
 			except BadRequest as excp:
-				if excp.message in FBAN_ERRORS:
-					pass
-				else:
+				if excp.message not in FBAN_ERRORS:
 					LOGGER.warning("Could not fban in {} because: {}".format(chat, excp.message))
 			except TelegramError:
 				pass
@@ -569,9 +563,7 @@ def unfban(bot: Bot, update: Update, args: List[str]):
 				"""
 
 		except BadRequest as excp:
-			if excp.message in UNFBAN_ERRORS:
-				pass
-			else:
+			if excp.message not in UNFBAN_ERRORS:
 				LOGGER.warning("Cannot remove fban in {} because: {}".format(chat, excp.message))
 		except TelegramError:
 			pass
@@ -585,7 +577,7 @@ def unfban(bot: Bot, update: Update, args: List[str]):
 			pass
 
 	message.reply_text("{} has been un-fbanned.".format(mention_html(user_chat.id, user_chat.first_name)),
-        parse_mode=ParseMode.HTML)
+	parse_mode=ParseMode.HTML)
 	sql.all_fed_users(fed_id)
 """
 	for x in FEDADMIN:
@@ -1022,10 +1014,7 @@ def is_user_fed_admin(fed_id, user_id):
 		return True
 	if fed_admins is False:
 		return False
-	if int(user_id) in fed_admins:
-		return True
-	else:
-		return False
+	return int(user_id) in fed_admins
 
 
 def is_user_fed_owner(fed_id, user_id):
@@ -1033,13 +1022,10 @@ def is_user_fed_owner(fed_id, user_id):
 	if getsql is False:
 		return False
 	getfedowner = eval(getsql['fusers'])
-	if getfedowner == None or getfedowner == False:
+	if getfedowner is None or getfedowner == False:
 		return False
 	getfedowner = getfedowner['owner']
-	if str(user_id) == getfedowner:
-		return True
-	else:
-		return False
+	return str(user_id) == getfedowner
 
 
 @run_async
@@ -1088,17 +1074,13 @@ def __user_info__(user_id, chat_id):
 # Temporary data
 def put_chat(chat_id, value, chat_data):
 	# print(chat_data)
-	if value is False:
-		status = False
-	else:
-		status = True
+	status = False if value is False else True
 	chat_data[chat_id] = {'federation': {"status": status, "value": value}}
 
 def get_chat(chat_id, chat_data):
 	# print(chat_data)
 	try:
-		value = chat_data[chat_id]['federation']
-		return value
+		return chat_data[chat_id]['federation']
 	except KeyError:
 		return {"status": False, "value": False}
 

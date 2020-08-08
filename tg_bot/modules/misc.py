@@ -235,9 +235,13 @@ def info(bot: Bot, update: Update, args: List[str]):
     elif not msg.reply_to_message and not args:
         user = msg.from_user
 
-    elif not msg.reply_to_message and (not args or (
-            len(args) >= 1 and not args[0].startswith("@") and not args[0].isdigit() and not msg.parse_entities(
-        [MessageEntity.TEXT_MENTION]))):
+    elif (
+        not msg.reply_to_message
+        and len(args) >= 1
+        and not args[0].startswith("@")
+        and not args[0].isdigit()
+        and not msg.parse_entities([MessageEntity.TEXT_MENTION])
+    ):
         msg.reply_text("I can't extract a user from this.")
         return
 
@@ -264,11 +268,11 @@ def info(bot: Bot, update: Update, args: List[str]):
 
         elif user.id in SUDO_USERS:
             text += "\n\nThis person is one of my sudo users."
-                   
+
         else:
             if user.id in SUPPORT_USERS:
                 text += "\n\nThis person is one of my support users." \
-                        
+
 
             if user.id in WHITELIST_USERS:
                 text += "\n\nThis person has been whitelisted! " \

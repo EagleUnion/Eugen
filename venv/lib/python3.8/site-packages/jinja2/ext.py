@@ -571,10 +571,7 @@ def extract_from_ast(node, gettext_functions=GETTEXT_FUNCTIONS, babel_style=True
             if not strings:
                 continue
         else:
-            if len(strings) == 1:
-                strings = strings[0]
-            else:
-                strings = tuple(strings)
+            strings = strings[0] if len(strings) == 1 else tuple(strings)
         yield node.lineno, node.node.name, strings
 
 
